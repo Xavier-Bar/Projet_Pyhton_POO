@@ -1,3 +1,5 @@
+from Arc import Arc
+
 class Graphe:
     def __init__(self):
         self.sommets = set()
@@ -102,4 +104,5 @@ class Graphe:
 
             if not ligne_sommet:
                 raise ValueError("Fichier vide ou sans sommets.")
+
         return graphe
