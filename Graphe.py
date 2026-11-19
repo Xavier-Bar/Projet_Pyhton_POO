@@ -160,3 +160,72 @@ class Graphe:
 
     def degre_total(self, sommet: str) -> int:
         return self.degre_entrant(sommet) + self.degre_sortant(sommet)
+
+
+    def shortest_path(self, depart: str, arrivee: str) -> tuple[list[str] | None, float]:
+        # Algorithme Dijkstra
+        # Vérification des types
+        if not isinstance(depart, str) or not isinstance(arrivee, str):
+            raise ValueError("Les sommets doivent être des chaînes de caractères")
+
+        # Nettoyage
+        depart = depart.strip()
+        arrivee = arrivee.strip()
+
+        if depart not in self.sommets or arrivee not in self.sommets:
+            raise ValueError("Un des sommets n'existe pas dans le graphe")
+
+        if depart == arrivee:
+            raise ValueError("Même arrivée que le départ")
+
+        # Initialisation des variable de suivi de l'algorithme
+        distances = {}
+        precedents = {}
+        for sommet in self.sommets:
+            distances[sommet] = float("inf")
+            precedents[sommet] = None
+
+        distances[depart] = 0.0
+        non_visites = set(self.sommets)
+
+        while non_visites:
+            # On récupère le sommet non visité ayant la plus petite distance actuelle
+            courant = None
+            min_distance = float("inf")
+
+            for sommet in non_visites:
+                if distances[sommet] < min_distance:
+                    min_distance = distances[sommet]
+                    courant = sommet
+
+            # Si aucun sommet n'est atteignable ou si on est arrivé
+            if courant is None or courant == arrivee:
+                break
+
+            # On retire 'courant' des sommets non visités
+            non_visites.remove(courant)
+
+            # On parcourt tous les arcs sortants de 'courant'
+            for arc in self.arcs:
+                if arc.origine == courant and arc.destination in non_visites:
+                    new_distance = distances[courant] + arc.poids
+
+                    if new_distance < distances[arc.destination]:
+                        distances[arc.destination] = new_distance
+                        precedents[arc.destination] = courant
+
+        # Vérification si aucun chemin a été trouvé
+        if distances[arrivee] == float("inf"):
+            return None, float("inf")
+
+        # Construction du chemin en remontant les sommets
+        chemin = []
+        actuel = arrivee
+        while actuel is not None:
+            chemin.append(actuel)
+            actuel = precedents[actuel]
+
+        # On retourne la liste
+        chemin.reverse()
+
+        return chemin, distances[arrivee]

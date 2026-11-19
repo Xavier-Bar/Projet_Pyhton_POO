@@ -27,6 +27,8 @@ if __name__ == "__main__":
     tester_erreurs("Arc doublon (même avec poids différent)", lambda: g.ajouter_arc("A", "B", 10))
     tester_erreurs("Arc avec poids négatif", lambda: g.ajouter_arc("A", "C", -3))
 
+
+
     print("\nTest lecture fichier")
     # Création d'un petit fichier de test temporaire
     with open("test_reseau.txt", "w", encoding="utf-8") as f:
@@ -39,6 +41,8 @@ if __name__ == "__main__":
     print(g_fichier)
 
     tester_erreurs("Fichier inexistant", lambda: Graphe.from_file("introuvable.txt"))
+
+
 
     print("\nTets des entrant et sortant")
     g_test = Graphe()
@@ -74,3 +78,27 @@ if __name__ == "__main__":
     tester_erreurs("Prédécesseurs d'un sommet inconnu", lambda: g_test.predecesseurs("Z"))
     tester_erreurs("Successeurs d'un sommet non-str", lambda: g_test.successeurs(123))
     tester_erreurs("Degré total d'un sommet inconnu", lambda: g_test.degre_total("Inexistant"))
+
+
+    print("\nTest shortest_path")
+    g_reseau = Graphe.from_file("reseau.txt")
+
+    # 1. Trajet demandé dans l'énoncé : de A vers G
+    # Chemin optimal attendu : A -> C (2) -> B (1) -> D (5) -> E (2) -> F (3) -> G (1) = 14.0
+    chemin_ag, cout_ag = g_reseau.shortest_path("A", "G")
+    print(f"Trajet A -> G : {chemin_ag} (coût total : {cout_ag})")
+    assert chemin_ag == ["A", "C", "B", "D", "E", "F", "G"], f"Chemin A->G incorrect : {chemin_ag}"
+    assert cout_ag == 14.0, f"Coût A->G incorrect : {cout_ag}"
+
+    # 2. Cas limite : départ identique à l'arrivée
+    chemin_aa, cout_aa = g_reseau.shortest_path("A", "A")
+    assert chemin_aa == ["A"] and cout_aa == 0.0, "Erreur sur trajet A -> A"
+
+    # 3. Cas limite : aucun chemin n'existe (vers le sommet isolé H)[cite: 1, 2]
+    chemin_ah, cout_ah = g_reseau.shortest_path("A", "H")
+    assert chemin_ah is None and cout_ah == float("inf"), "Erreur sur trajet impossible A -> H"
+
+    # 4. Cas d'erreur : sommet inconnu
+    tester_erreurs("Shortest path avec sommet inconnu", lambda: g_reseau.shortest_path("A", "Z"))
+
+    print("[OK]    Algorithme de Dijkstra (shortest_path) validé sur tous les cas !")
