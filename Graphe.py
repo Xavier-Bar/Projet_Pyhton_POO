@@ -106,3 +106,57 @@ class Graphe:
                 raise ValueError("Fichier vide ou sans sommets.")
 
         return graphe
+
+
+    def predecesseurs(self, sommet: str) -> list[str]:
+        # Vérif du type
+        if not isinstance(sommet, str):
+            raise ValueError("Le sommet n'est pas une chaîne de caractères")
+
+        # Nettoyage
+        sommet = sommet.strip()
+
+        # Contrôle si un sommet existe déjà
+        if sommet not in self.sommets:
+            raise ValueError("Sommet inconnu dans le graphe")
+
+        # Récupération des predecesseurs
+        predecesseurs = []
+        for arc in self.arcs:
+            if arc.destination == sommet:
+                predecesseurs.append(arc.origine)
+
+        return sorted(predecesseurs)
+
+    
+    def successeurs(self, sommet: str) -> list[str]:
+        # Vérif du type
+        if not isinstance(sommet, str):
+            raise ValueError("Le sommet n'est pas une chaîne de caractères")
+
+        # Nettoyage
+        sommet = sommet.strip()
+
+        # Contrôle si un sommet existe déjà
+        if sommet not in self.sommets:
+            raise ValueError("Sommet inconnu dans le graphe")
+
+        # Récupération des successeurs
+        successeurs = []
+        for arc in self.arcs:
+            if arc.origine == sommet:
+                successeurs.append(arc.destination)
+
+        return sorted(successeurs)
+
+
+    def degre_entrant(self, sommet: str) -> int:
+        return len(self.predecesseurs(sommet))
+
+
+    def degre_sortant(self, sommet: str) -> int:
+        return len(self.successeurs(sommet))
+
+
+    def degre_total(self, sommet: str) -> int:
+        return self.degre_entrant(sommet) + self.degre_sortant(sommet)
