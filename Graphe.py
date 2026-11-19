@@ -61,3 +61,45 @@ class Graphe:
     def __str__(self) -> str:
         arcs_lst = "\n".join(str(arc) for arc in self.arcs)
         return f"Les sommets présents dans le graphe sont : {self.obtenir_sommets()}.\nLes arcs présents le graphe sont :\n{arcs_lst}"
+
+    @classmethod
+    def from_file(Graphe, chemin: str) -> "Graphe":
+        graphe = Graphe()
+        with open(chemin, "r", encoding="utf-8") as fichier:
+
+            ligne_sommet = False
+            for ligne in fichier:
+                ligne_propre = ligne.strip()
+
+                # Continue la boucle si la ligne est vide
+                if ligne_propre=="":
+                    continue
+                
+                # Lecture des sommets
+                if ligne_propre.startswith("Sommets"):
+                    new_ligne = ligne_propre.split(":",1)[1]
+                    new_ligne =new_ligne.split(",")
+                    for element in new_ligne:
+                        graphe.ajouter_sommet(element)
+                    
+                    # Pour générer un cas d'erreur si ma première ligne n'existe pas
+                    ligne_sommet = True
+                
+                elif not ligne_sommet:
+                    raise ValueError("Erreur lors de la lecture des sommets.")
+                
+                # Lecture des arcs
+                else:
+                    new_ligne = ligne_propre.split(";")
+                    if len(new_ligne)==3:
+                        try:
+                            poids = float(new_ligne[2])
+                        except ValueError:
+                            raise ValueError("Une ligne d'arc n'a pas un poids valide")
+                        graphe.ajouter_arc(new_ligne[0],new_ligne[1],poids)
+                    else:
+                        raise ValueError("Une ligne n'est pas reconnue comme arc ou sommets")
+
+            if not ligne_sommet:
+                raise ValueError("Fichier vide ou sans sommets.")
+        return graphe
