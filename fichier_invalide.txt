@@ -1,0 +1,2 @@
+Sommets: A, B
+A; B; -5
