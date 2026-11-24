@@ -1,0 +1,5 @@
+Sommets: A, B, C, Z
+A; B; 4
+A; C; 99
+C; B; 1
+B; Z; 7

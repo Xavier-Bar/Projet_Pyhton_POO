@@ -303,3 +303,25 @@ class Graphe:
         chemin.reverse()
 
         return chemin, distances[arrivee]
+
+
+    def intersection(self, autre_graphe: "Graphe") -> "Graphe":
+        # Vérification que autre_graphe est un Graphe
+        if not isinstance(autre_graphe, Graphe):
+            raise ValueError("L'élément join doit être un Graphe")
+
+        # Création du nouveau graphe
+        nouveau_graphe = Graphe()
+
+        # Ajout des sommets présents dans les deux graphes
+        for sommet in self.sommets:
+            if sommet in autre_graphe.sommets:
+                nouveau_graphe.ajouter_sommet(sommet)
+
+        # Ajout des arcs identiques
+        for arc1 in self.arcs:
+            for arc2 in autre_graphe.arcs:
+                if arc1 == arc2: # == Sa appel __eq__ de ma classe arc
+                    nouveau_graphe.ajouter_arc(arc1.origine, arc1.destination, arc1.poids)
+
+        return nouveau_graphe
