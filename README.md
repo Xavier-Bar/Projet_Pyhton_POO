@@ -40,6 +40,6 @@ python Main.py
 * **Outil utilisé :** Gemini (modèle Gemini 4 Hydrogen) ainsi que l'autocomplétion intégrée dans l'IDE Antigravity.
 * **Usage effectué et parties concernées :**
   * **Compréhension du sujet et de la théorie des graphes :** Aide à la clarification des consignes de l'énoncé et des notions fondamentales de graphes orientés pondérés avant que le sujet ne soit abordé en cours.
-  * **Conception (`Arc.py` — Partie E.2) :** Rappel de la nécessité de comparer strictement les trois attributs (`origine`, `destination` et `poids`) dans la méthode `__eq__` de la classe `Arc` afin de pouvoir réutiliser cette comparaison lors de l'intersection de deux graphes.
+  * **Rappel (`Arc.py` — Partie E.2) :** Lors de la conception de `Arc.py`, rappel de la nécessité de comparer strictement les trois attributs (`origine`, `destination` et `poids`) dans la méthode `__eq__` de la classe `Arc` afin de pouvoir réutiliser cette comparaison lors de l'intersection de deux graphes.
   * **Algorithme de Dijkstra (`Graphe.py` — Parties D et E.1) :** Accompagnement pas à pas sur la structure de l'algorithme (dictionnaires `distances`, `precedents` et ensemble `non_visites`) afin d'écrire une implémentation lisible avec des boucles classiques.
   * **Tests (`Main.py` — Partie 5) :** Co-écriture et structuration des assertions automatisées couvrant l'ensemble des cas nominaux et cas limites demandés.
